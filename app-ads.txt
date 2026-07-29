@@ -1,0 +1,3 @@
+# QuesToDo app-ads.txt — AdMobの販売者検証用（サイトルートに設置必須）
+# TODO(M8-4): AdMobアカウント作成後、pub-0000000000000000 を実際のパブリッシャーIDに置き換える
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
