@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="RPG風ToDoアプリ QuesToDo — 企画からApp Store審査提出まで18日間。React Native / TypeScript strict / サブスク課金・広告収益化まで実装した個人開発の記録。">
+<meta name="description" content="RPG風ToDoアプリ QuesToDo — 企画からApp Store公開まで23日間。React Native / TypeScript strict / サブスク課金・広告収益化まで実装した個人開発の記録。">
 <meta property="og:title" content="QuesToDo — 開発ポートフォリオ | ninomae">
-<meta property="og:description" content="企画からApp Store審査提出まで18日間。RN/TS strict・課金・広告・分析・多言語まで実装した個人開発iOSアプリの記録。">
+<meta property="og:description" content="企画からApp Store公開まで23日間。RN/TS strict・課金・広告・分析・多言語まで実装した個人開発iOSアプリの記録。">
 <meta property="og:type" content="website">
 <title>QuesToDo — 開発ポートフォリオ | ninomae</title>
 <style>
@@ -142,10 +142,10 @@
   <h1>QuesToDo<span style="color:var(--ink-3); font-weight:300;"> — タスク管理を、冒険にする。</span></h1>
   <p class="lede">
     やることを「クエスト」に見立て、完了すると経験値が入りドット絵の冒険者が成長していくRPG風ToDoアプリ。
-    企画・設計から実装・収益化・App Store審査提出まで、<strong>18日間</strong>で一人で完遂しました（2026年8月・審査提出済み）。
+    企画・設計から実装・収益化・App Store公開まで、<strong>23日間</strong>で一人で完遂しました（2026年8月7日リリース）。
   </p>
   <div class="meta">
-    <span class="chip blue">iOS（App Store審査提出済み）</span>
+    <a class="chip blue" href="https://apps.apple.com/app/questodo/id6794613228" target="_blank" rel="noopener" style="text-decoration:none;">App Storeで公開中 →</a>
     <span class="chip">React Native / Expo</span>
     <span class="chip">TypeScript strict</span>
     <span class="chip">完全サーバーレス</span>
@@ -170,7 +170,7 @@
       <li><strong>0→1をひとりで</strong>：要件定義・仕様書5本・UI設計・実装・テスト・課金/広告組み込み・ストア審査対応まで全工程を単独で実施</li>
       <li><strong>商用水準の機能一式</strong>：サブスクリプション（月額/年額/買い切り）、リワード/バナー広告、プロダクト分析、ローカル通知、日英対応、バックアップ</li>
       <li><strong>保守を前提とした設計</strong>：strict TypeScript・自動テスト366件・追記型DBマイグレーション9世代・外部SDKの層分離</li>
-      <li><strong>AIエージェント活用</strong>：Claude Codeを開発パートナーとして運用し、仕様書駆動+マルチエージェント相互レビューのプロセスを設計。18日での完成はこの生産性設計の実証です</li>
+      <li><strong>AIエージェント活用</strong>：Claude Codeを開発パートナーとして運用し、仕様書駆動+マルチエージェント相互レビューのプロセスを設計。23日での公開到達はこの生産性設計の実証です</li>
     </ul>
   </div>
   <div class="shots">
@@ -183,9 +183,9 @@
 
 <section id="numbers">
   <h2><span class="num">01</span>数字で見るQuesToDo</h2>
-  <p class="sub">2026-07-16 開発開始 → 2026-08-02 App Store審査提出</p>
+  <p class="sub">2026-07-16 開発開始 → 2026-08-02 審査提出 → 2026-08-07 App Storeで公開</p>
   <div class="stats">
-    <div class="stat"><div class="v">18<small>日</small></div><div class="k">企画→審査提出</div></div>
+    <div class="stat"><div class="v">23<small>日</small></div><div class="k">企画→App Store公開</div></div>
     <div class="stat"><div class="v">13,701<small>行</small></div><div class="k">実装コード（86ファイル・テスト除く）</div></div>
     <div class="stat"><div class="v">366<small>件</small></div><div class="k">自動テスト（全パス）</div></div>
     <div class="stat"><div class="v">11<small>画面</small></div><div class="k">S-00〜S-10</div></div>
@@ -299,7 +299,7 @@
   <h2><span class="num">05</span>ストアリリース対応（審査・法務・収益化の実務）</h2>
   <p class="sub">個人開発で見落とされがちな「出荷の実務」まで一通り経験しています</p>
   <ul class="checks">
-    <li><b>App Store審査提出</b> — アプリ本体+初回サブスクリプション3商品+サブスクグループの同時提出（2026-08-02、手動リリース設定）</li>
+    <li><b>App Store審査を通過してリリース</b> — アプリ本体+初回サブスクリプション3商品+サブスクグループを同時提出（2026-08-02）→ <b>2026-08-07 承認・公開</b>。審査は3回。①ガイドライン3.1.2（サブスク提供時は説明文に利用規約リンクが必須）②ガイドライン2.1（ATTの許可ダイアログが審査環境で出なかった。原因は起動直後のactive前に要求していたこと）③承認。いずれも原因を特定して恒久対応した</li>
     <li><b>App Privacy申告</b> — 収集データ7種を用途別に申告（すべて個人と紐付けなし。トラッキング使用はデバイスIDのみ）。ATTダイアログ・プライバシーポリシー公開（GitHub Pages）</li>
     <li><b>EEA配信除外の判断</b> — Google UMP同意フォーム未実装とDSAトレーダー要件（住所公開）を考慮し、MVPではEEA30か国を配信対象から除外する意思決定</li>
     <li><b>課金の実務</b> — 有料アプリ契約・W-8BEN・ASCでの商品作成・RevenueCatオファリング設定・実機サンドボックス購入テスト（購入成功・エンタイトルメント反映・失効挙動を確認。復元はサンドボックス特有の不安定挙動まで把握）</li>
@@ -341,14 +341,14 @@
       <div class="tl"><div class="t">マルチエージェント相互レビュー</div><div class="d">実装のたびに複数のAIエージェントが独立レビュー→敵対的検証で確証した指摘のみ修正。バックアップ復元の脆弱性やa11yトラップ等を出荷前に検出</div></div>
       <div class="tl"><div class="t">人間は「決める・確かめる・説明できる」に責任を持つ</div><div class="d">実装・調査・ストア入力作業はAIに委任しつつ、機能の取捨選択・UX判断・実機検証・課金/広告の意思決定は人間が実施。設計判断とコードの中身は人間が把握し説明責任を持つ体制（面接でのコードウォークスルー可能です）</div></div>
     </div>
-    <p class="note">この体制の狙いは「速さ」そのものではなく、<b>仕様・テスト・レビューを省かずに速い</b>こと。18日という期間は、品質プロセスを保ったままAIで生産性を引き上げられることの実証だと考えています。</p>
+    <p class="note">この体制の狙いは「速さ」そのものではなく、<b>仕様・テスト・レビューを省かずに速い</b>こと。23日でApp Store公開まで到達できたのは、品質プロセスを保ったままAIで生産性を引き上げられることの実証だと考えています。</p>
     <p class="note">本アプリの開発から抽出した汎用技術のまとめは <a class="link" href="./mobile-tech-guide.html">モバイルアプリ開発 汎用技術ガイド</a> にまとめています。</p>
   </div>
 </section>
 
 <footer>
   <div>QuesToDo — 企画・開発: ninomae（2026）</div>
-  <div><a class="link" href="./mobile-tech-guide.html">② 技術ガイド</a> / <a class="link" href="./app-starter-guide.html">③ 初学者向けチェックリスト</a> / ソースコード: プライベートリポジトリ（面接時に開示可能） / <a class="link" href="https://ninomaedev.github.io" target="_blank" rel="noopener">ninomaedev.github.io</a></div>
+  <div><a class="link" href="https://apps.apple.com/app/questodo/id6794613228" target="_blank" rel="noopener">App Store</a> / <a class="link" href="./mobile-tech-guide.html">② 技術ガイド</a> / <a class="link" href="./app-starter-guide.html">③ 初学者向けチェックリスト</a> / ソースコード: プライベートリポジトリ（面接時に開示可能）</div>
 </footer>
 
 </div>
