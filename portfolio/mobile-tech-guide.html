@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ジャンルを問わず必要になるスマートフォンアプリ開発の普遍技術15項目を、App Store審査提出まで到達したRPG風ToDoアプリの実例つきで整理した技術ガイド。">
+<meta property="og:title" content="モバイルアプリ開発 汎用技術ガイド — QuesToDoの実例から">
+<meta property="og:description" content="どのアプリでも必要になる15の普遍技術を「なぜ汎用か / 実例 / 実践ポイント」で整理。">
+<meta property="og:type" content="article">
+<title>モバイルアプリ開発 汎用技術ガイド — QuesToDoの実例から</title>
+<style>
+  :root {
+    --accent: #0066cc;
+    --accent-soft: #e8f1fb;
+    --ink: #1d1d1f;
+    --ink-2: #4b4b50;
+    --ink-3: #6e6e73;
+    --bg: #f5f5f7;
+    --card: #ffffff;
+    --line: #e3e3e8;
+    --ok: #1a7f37;
+    --warn: #9a6700;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", Meiryo, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.8; font-size: 15.5px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px 80px; }
+
+  nav.docnav { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 24px; }
+  nav.docnav a {
+    padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); font-size: 13px; color: var(--ink-2); text-decoration: none;
+  }
+  nav.docnav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav.docnav a.current { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+  header.hero { padding: 36px 0 12px; }
+  .hero .kicker { color: var(--accent); font-weight: 600; letter-spacing: .06em; font-size: 13px; }
+  .hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -.02em; line-height: 1.3; margin: 6px 0 10px; }
+  .hero .lede { color: var(--ink-2); font-size: 16px; max-width: 46em; }
+
+  nav.toc {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 22px; margin: 24px 0 8px;
+  }
+  nav.toc .t { font-weight: 600; font-size: 13.5px; color: var(--ink-3); margin-bottom: 8px; }
+  nav.toc ol { margin-left: 1.4em; columns: 2; column-gap: 32px; font-size: 14px; }
+  nav.toc li { margin: 3px 0; break-inside: avoid; }
+  nav.toc a { color: var(--ink-2); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section.topic { margin-top: 44px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 28px; }
+  h2 { font-size: 21px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 2px; }
+  h2 .num { color: var(--accent); font-size: 14px; font-weight: 600; margin-right: 8px; }
+  .tagline { color: var(--ink-3); font-size: 13.5px; margin-bottom: 14px; }
+
+  .block { margin-top: 12px; }
+  .block .label {
+    display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .04em;
+    padding: 2px 10px; border-radius: 999px; margin-bottom: 6px;
+  }
+  .label.why { background: var(--accent-soft); color: var(--accent); }
+  .label.ex { background: #eef7ee; color: var(--ok); }
+  .label.point { background: #fdf3e3; color: var(--warn); }
+  .block p, .block li { font-size: 14.5px; color: var(--ink-2); }
+  .block ul { margin: 4px 0 0 1.3em; }
+  .block li { margin: 5px 0; }
+
+  code {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: .88em;
+    background: var(--accent-soft); color: #08427c; padding: 1px 6px; border-radius: 5px;
+  }
+  b { color: var(--ink); }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  a.link { color: var(--accent); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    section.topic { break-inside: avoid-page; border: none; padding: 12px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="docnav" aria-label="関連ドキュメント">
+  <a href="./index.html">① 開発ポートフォリオ</a>
+  <a href="./mobile-tech-guide.html" class="current" aria-current="page">② 汎用技術ガイド（中級者向け）</a>
+  <a href="./app-starter-guide.html">③ はじめての実装チェックリスト（初学者向け）</a>
+</nav>
+
+<header class="hero">
+  <div class="kicker">TECH GUIDE</div>
+  <h1>モバイルアプリ開発 汎用技術ガイド<br><span style="color:var(--ink-3); font-weight:300; font-size:20px;">— RPG風ToDoアプリ「QuesToDo」の開発で実証した15の普遍技術</span></h1>
+  <p class="lede">
+    ジャンルを問わず、ほぼすべてのスマートフォンアプリで必要になる技術・設計・実務を、
+    実際にApp Store審査提出まで到達したアプリの実例つきで整理したものです。
+    各項目は「なぜ汎用か」「QuesToDoでの実例」「実践ポイント」の3点セットで読めます。
+  </p>
+</header>
+
+<nav class="toc">
+  <div class="t">目次</div>
+  <ol>
+    <li><a href="#t1">レイヤードアーキテクチャとSDK隔離</a></li>
+    <li><a href="#t2">strictな型付けとの付き合い方</a></li>
+    <li><a href="#t3">ローカルDBと追記型マイグレーション</a></li>
+    <li><a href="#t4">イベント履歴を真実にする（導出とキャッシュ）</a></li>
+    <li><a href="#t5">テストできる形に書く（時刻の注入）</a></li>
+    <li><a href="#t6">i18n（国際化）は最初から</a></li>
+    <li><a href="#t7">デザイントークン</a></li>
+    <li><a href="#t8">画面ライフサイクルと「日付跨ぎ」</a></li>
+    <li><a href="#t9">通知の設計</a></li>
+    <li><a href="#t10">アプリ内課金</a></li>
+    <li><a href="#t11">モバイル広告</a></li>
+    <li><a href="#t12">プロダクト分析とプライバシー</a></li>
+    <li><a href="#t13">バックアップとデータ移行</a></li>
+    <li><a href="#t14">リリースエンジニアリング</a></li>
+    <li><a href="#t15">アクセシビリティ</a></li>
+  </ol>
+</nav>
+
+<section class="topic" id="t1">
+  <h2><span class="num">01</span>レイヤードアーキテクチャとSDK隔離</h2>
+  <p class="tagline">画面から外部SDKを直接呼ばない — それだけでアプリの寿命が延びる</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>広告・課金・分析などの外部SDKは、モバイル開発でもっとも「壊れやすい依存」です。SDKのメジャー更新・サービス終了・審査要件の変化は必ず起きます。UI層に直接呼び出しが散らばっていると、その度に全画面を触ることになります。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>広告/課金/分析/共有/バックアップ/通知を<code>services/</code>ディレクトリに隔離し、画面はサービスの関数だけを呼ぶ構成にしました。さらにAPIキーが未設定のときは「安全な無効モード」で動く設計にしたため、キー設定前の開発中も、SDK未搭載の旧ビルドでも、アプリは一度も起動不能になりませんでした。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>UI → ドメインロジック → データ層 → 外部サービスの一方向依存を守る</li>
+      <li>SDKの型を画面に漏らさない（自前の正規化ビューに変換して渡す）</li>
+      <li>ネイティブモジュールは動的importにすると、未搭載ビルドでの起動クラッシュを防げる</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t2">
+  <h2><span class="num">02</span>strictな型付けとの付き合い方</h2>
+  <p class="tagline">TypeScript strict + any禁止は「速度を落とす制約」ではなく「後半戦の保険」</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>モバイルアプリは「リリース後に直しにくい」ソフトウェアです。ユーザーの手元で動くバイナリは即座には差し替えられず、クラッシュは星1レビューに直結します。コンパイル時に潰せるバグをランタイムに残さないことの価値が、Webよりも高い環境です。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>strictモード・<code>any</code>禁止を初日から徹底。マスタデータ（スキル52種・アバターパーツ84項目）もTypeScript定数にしたため、カタログの定義ミスは型エラーとして即座に検出されます。i18nのキーもリテラル型で縛り、月名キー（<code>months.1</code>〜<code>12</code>）のような動的参照も型安全に扱いました。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>「後でstrictにする」は現実には起きない。初日に有効化する</li>
+      <li>マスタデータをコードに置くと、型チェック=データ検証になる</li>
+      <li>ID列挙などはunion型にして、網羅漏れをコンパイラに見つけさせる</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t3">
+  <h2><span class="num">03</span>ローカルDBと追記型マイグレーション</h2>
+  <p class="tagline">ユーザーの端末にあるDBは「戻せない本番環境」</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>オフライン対応・高速起動のため、ほとんどのアプリはローカルDB（SQLiteなど）を持ちます。そしてローカルDBの怖さは、<b>全ユーザーの端末それぞれが独立した本番DB</b>であること。どのバージョンから更新してくるか分からないユーザー全員を、安全に最新スキーマへ運ぶ仕組みが必須です。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>スキーマ変更は<code>ALTER TABLE ADD / CREATE</code>のみ許可する追記型マイグレーションをv1→v9まで9世代実施。<code>PRAGMA user_version</code>で現在版を管理し、「v3のフィクスチャDBを最新まで昇格させて中身を検証する」テストを世代ごとに常備しました。開発期間を通じて実データ入りの実機DBに毎世代適用し、データ事故ゼロで完走しています。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>DROP/RENAMEを含む破壊的変更は原則禁止。列の廃止は「使うのをやめる」で表現</li>
+      <li>マイグレーションは番号付きで追記し、途中の版を後から書き換えない</li>
+      <li>旧版フィクスチャ→最新版への昇格テストがあれば、リリースが怖くなくなる</li>
+      <li>WALモード・外部キー有効化は初期化時に必ず明示する</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t4">
+  <h2><span class="num">04</span>イベント履歴を真実にする（導出とキャッシュ）</h2>
+  <p class="tagline">「現在値」を保存するな、「起きたこと」を保存しろ</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>ポイント・スコア・課金履歴・学習進捗など、多くのアプリは「積み上がる数値」を持ちます。現在値だけを上書き保存すると、集計仕様の変更・バグ修正・統計機能の追加のたびに過去へ遡れず詰みます。履歴（イベント）を真実にし、現在値は再計算できるキャッシュとして扱うのが堅牢です。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>EXP獲得は<code>exp_events</code>への追記のみ。レベル・累計EXP・ストリークはすべてイベント列から純関数で再計算します。開発中にレベル曲線を1度変更しましたが、再計算を通すだけで既存データが新曲線に正しく移行されました。後から追加した統計機能（21項目）も、スキーマ変更なしの純粋な導出だけで実装できています。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>イベントには発生時刻と種別を必ず持たせる（後の集計の自由度になる）</li>
+      <li>キャッシュ列を持つのは良いが、「再計算関数」を必ず併設して真実はイベントに置く</li>
+      <li>関連データが物理削除されても集計が壊れないよう、イベント側に必要な値を焼き込む</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t5">
+  <h2><span class="num">05</span>テストできる形に書く（時刻の注入）</h2>
+  <p class="tagline">モバイルのバグの名所は「日付跨ぎ」と「タイムゾーン」</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>ストリーク・期限・リマインダー・「今日の〇〇」— 時刻に依存する機能はほぼ全アプリにあります。ロジック内部で<code>Date.now()</code>を呼ぶと、深夜0時前後の挙動やタイムゾーン差をテストで再現できず、ユーザーからの「日付がおかしい」報告に対して再現手段がなくなります。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>すべてのロジック関数は現在時刻<code>now</code>（unixミリ秒）と今日<code>todayStr</code>（'YYYY-MM-DD'）を引数で受け取ります。この規約のもとで、ストリークの日付跨ぎ・繰り返しクエストの出現日・通知スケジュールといった時刻依存ロジックを含む計366件のテストを構築し、任意の日時を固定して検証できました。DB層のテストはモックでなくNode組み込みSQLiteで実SQLを流しています。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>「現在時刻は必ず引数」を初日にルール化する（後から直すのは大工事）</li>
+      <li>日付文字列は辞書順=時系列順になる'YYYY-MM-DD'に統一すると比較が単純になる</li>
+      <li>未来のタイムスタンプを持つデータは「端末時計をいじった痕跡」として信用しない</li>
+      <li>浮動小数点の掛け算で数値がズレる（57.4999問題）— 整数演算+明示的な丸めで固定する</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t6">
+  <h2><span class="num">06</span>i18n（国際化）は最初から</h2>
+  <p class="tagline">後付けのi18nは「全画面リライト」と同じコスト</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>ストア配信は最初からグローバルです。文字列をハードコードしたアプリの多言語化は、全コンポーネントの書き換えになります。たとえ当面1言語でも、文言を辞書ファイルに分離しておくだけで、文言修正がコード変更なしで済み、レビュー・監修も辞書ファイル1枚で回せます。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>表示文字列のハードコード禁止をルール化し、i18next + ja/en 2言語・約700キーで管理。新機能の文言追加時は両方のJSONへ同時追加（英訳が仮でもTODOコメント付きで入れる）を徹底しました。端末ロケール追従+アプリ内切替の両対応で、起動時の言語適用はモジュールスコープで行い「初回フレームだけ英語で描画される」フラッシュも防いでいます。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>キーは画面/機能の名前空間で構造化する（<code>records.summary</code>など）</li>
+      <li>数値・複数形・日付は文字列連結せずフォーマッタに任せる</li>
+      <li>「システム設定に従う」選択肢を用意しつつ、アプリ内での明示切替も持つ</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t7">
+  <h2><span class="num">07</span>デザイントークン</h2>
+  <p class="tagline">hex直書き禁止 — 一貫性は才能ではなく仕組みで作る</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>デザイナー不在の開発でUIが素人っぽくなる最大の原因は、画面ごとに微妙に違う色・余白・フォントサイズです。値をトークン（定数）に集約し、選択肢そのものを減らすことで、誰が書いても同じトーンになります。ダークモード対応やブランド変更もトークンの差し替えで済みます。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>色・タイポグラフィ・角丸・余白を<code>theme/tokens.ts</code>に集約し、hex値のコード直書きを禁止。さらに「アクセントは1色のみ」「フォントウェイトは3段階のみ」「影はアバターの下だけ」という制約をデザイン文書で明文化しました。ドット絵はコンテンツ領域限定というルールで、Apple的な端正なUIとRPGの世界観を衝突させずに共存させています。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>「使っていい値のリスト」を先に決め、都度判断をなくす</li>
+      <li>制約は文書化する。「なんとなく統一」は人数が増えた瞬間に崩れる</li>
+      <li>押下時のスケール量などインタラクションもトークン化すると触感が揃う</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t8">
+  <h2><span class="num">08</span>画面ライフサイクルと「日付跨ぎ」</h2>
+  <p class="tagline">モバイルアプリは「開きっぱなしで放置される」前提で作る</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>ユーザーはアプリを終了しません。バックグラウンドに置いたまま翌日開きます。タブ画面はアンマウントされず、propsも自動では更新されません。「昨日のままの画面」「別タブで変えたのに反映されない」は、この前提を見落としたときの定番バグです。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>タブ間のデータ反映は<code>focus</code>イベントでの再読込に統一。さらに<code>AppState</code>の復帰検知+分単位タイマーで「今日」を追従させ、深夜0時を跨いでもホームの「今日のクエスト」や統計が古い日付のまま残らないようにしました。フォアグラウンド復帰時には課金状態の再評価も行い、サブスク失効をセッション中に反映します。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>タブ画面は「アンマウントされない」を前提に、focusで能動的に更新する</li>
+      <li>「今日」に依存する画面はAppState復帰+タイマーで日付を追従させる</li>
+      <li>モーダルの連続表示はOS側の競合がある（iOSでは閉じる→開くに遅延が必要な場合がある）</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t9">
+  <h2><span class="num">09</span>通知の設計</h2>
+  <p class="tagline">「その都度スケジュール」ではなく「あるべき状態を毎回作り直す」</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>リマインダー・期限通知はほぼ全アプリの要件です。個別にスケジュール/キャンセルを積み重ねる方式は、編集・削除・設定変更のたびに整合性が壊れ、「消したはずの通知が来る」バグの温床になります。また通知許可はいつでも取り消されるため、権限がない状態を常に正常系として扱う必要があります。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>「現在のデータから、あるべき通知一覧を純関数で導出→既存を全キャンセル→全スケジュール」という宣言的な方式にしました。これで個別の差分管理が不要になり、通知プラン自体をユニットテストできます。ストリーク防衛通知は「今日完了したら翌日20時に予約する」先行スケジュール方式で、アプリを開かない日でも途切れる前に届きます。サーバーレス方針のためAPNs（プッシュ）は使わず、全てローカル通知で構成しました。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>通知プランを純関数で導出できる形にする（テスト可能・差分管理不要）</li>
+      <li>権限却下・後からのOFF切替を正常系として設計する</li>
+      <li>ローカル通知で足りる要件にプッシュ基盤を建てない（コストと審査要件が段違い）</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t10">
+  <h2><span class="num">10</span>アプリ内課金</h2>
+  <p class="tagline">コード実装は全体の半分。残り半分は「ストアとお金の実務」</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>サブスクリプション・買い切りはアプリ収益化の本命ですが、StoreKitの生実装はレシート検証・復元・プラン変更・家族共有など罠が多く、さらに契約書類（W-8BEN等）・ストア側の商品設定・サンドボックステストという実務が必ず付いてきます。この全体像を一度経験しているかどうかで立ち上がり速度が大きく変わります。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>RevenueCatを採用し、月額/年額/買い切りの3商品を<code>premium</code>という1つのエンタイトルメントに束ねました。画面は「プレミアムか否か」だけを見るため、将来のプラン追加でUIは変わりません。オフライン時は7日猶予付きのローカルキャッシュで判定し、このキャッシュはバックアップに含めない（改ざん耐性）設計です。実機のサンドボックス環境で購入成功・エンタイトルメント反映・失効をテストし、「サンドボックスの月額サブスクは数分で失効する」「未サインイン時はUSD表示になる」「復元はSTORE_PROBLEMが頻発する既知の不安定挙動がある」といった紛らわしい正常挙動も把握済みです。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>商品IDでなくエンタイトルメント（権利）でUIを分岐させる</li>
+      <li>価格は動的取得しハードコードしない（国別価格・改定に自動追従）</li>
+      <li>課金状態のローカルキャッシュには猶予期限を付け、バックアップからは除外する</li>
+      <li>初回サブスクの審査はアプリ本体と同時提出が必要（Apple）— リリース計画に織り込む</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t11">
+  <h2><span class="num">11</span>モバイル広告</h2>
+  <p class="tagline">実装より「事故らない運用設計」が本体</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>無料アプリの収益源として広告は依然主力です。ただし本番広告を開発中に表示して自分でタップするとアカウント停止（=収益源の喪失）があり得るため、テストIDとの切替を人間の注意力でなく仕組みで保証する必要があります。iOSではATT（トラッキング許可）とSKAdNetworkの対応も事実上必須です。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>AdMobでバナー+リワードの2形式を実装。<code>__DEV__</code>ビルドでは本番ユニットIDを設定していてもテストIDに強制切替する構造にし、自己クリック事故を構造的に防止しました。リワード広告は「+○EXP即付与」ではなく「視聴で30分間EXP2倍」のブーストタイム形式にし、視聴が能動的な戦略になるよう設計。ATTの結果は広告リクエストごとに反映し、ロード失敗時は30秒バックオフで再試行します。ホーム画面にはバナー広告を置かない（世界観の聖域）、リワードはユーザーが能動的に選ぶ導線としてホームにのみ置く、というプロダクト判断も明文化しました。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>テストID切替はビルドフラグで強制する（設定忘れを人間に依存させない）</li>
+      <li>広告のロード失敗・在庫なしを正常系として扱い、UIが永久に「準備中」で固まらないようにする</li>
+      <li>app-ads.txtの公開、ストア公開後の広告ネットワーク側アプリ審査まで含めて工程に入れる</li>
+      <li>どの画面に広告を「置かないか」を先に決める（体験の核を守る）</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t12">
+  <h2><span class="num">12</span>プロダクト分析とプライバシー</h2>
+  <p class="tagline">計測は「何でも送る」から「設計して送る」へ</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>継続率や機能の利用状況が見えなければ改善は勘になります。一方でGDPRや各ストアのプライバシー申告により、「とりあえず全部計測」は法務リスクそのものになりました。イベントを設計し、個人情報を送らない構造を最初から作るのが現代の標準です。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>PostHogで11イベントを定義し、イベント名とプロパティを型定義+仕様書で管理（勝手に増やさない運用）。識別子は端末生成の匿名UUIDのみで、名前・メール等のPIIは一切送りません。タッチ操作の自動キャプチャとセッション録画は使わず、送信されるのは定義済みイベントとSDK標準のアプリ起動/復帰イベントのみに限定。App Storeのプライバシー申告（収集データ7種・トラッキング申告）と実装が一致する状態を保っています。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>イベントは「意思決定に使う問い」から逆算して設計する</li>
+      <li>識別子は端末生成の匿名IDに限定し、PIIをプロパティに含めない</li>
+      <li>ストアのプライバシー申告・ATT・ポリシー文書と実装を常に同期させる</li>
+      <li>キー未設定でも動く「無効モード」を作ると開発・CI環境で汚染データが出ない</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t13">
+  <h2><span class="num">13</span>バックアップとデータ移行</h2>
+  <p class="tagline">サーバーレスアプリの信頼は「データを失わないこと」で決まる</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>端末内にデータを持つアプリにとって、機種変更・誤削除はデータ全損のリスクです。エクスポート/インポートは信頼の生命線ですが、「自分が過去に出力したファイル」は将来のスキーマと食い違い、また改ざんされている可能性もある外部入力として扱う必要があります。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>バックアップJSONにスキーマバージョンを持たせ、旧版は取込時にマイグレーション。復元は型・日付形式・値域まで検証してから単一トランザクションで全置換し、復元後に再計算を走らせてキャッシュを作り直します。「期限が過去にならない永久ブースト」のような改ざんデータは検証で弾きます。ファイル書込は一時ファイル→世代退避→本体の順に入れ替え、書込中クラッシュでも直前世代へフォールバックできる構造です。課金状態は改ざん耐性のため意図的に含めていません。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>バックアップにschema_versionを必ず入れ、旧版の取込パスをテストする</li>
+      <li>復元データは「信頼できない外部入力」としてバリデーションする</li>
+      <li>非アトミックなファイルAPIでは世代退避方式で書き込む</li>
+      <li>権利情報（課金状態）はバックアップに含めない</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t14">
+  <h2><span class="num">14</span>リリースエンジニアリング</h2>
+  <p class="tagline">「コードが完成」から「ストアに並ぶ」までは、もう一つのプロジェクト</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>証明書・プロビジョニング・ビルド番号・スクリーンショット規格・プライバシー申告・年齢制限・配信地域・審査対応 — どのアプリでも通る道ですが、初見では数週間溶けます。ビルド→提出を自動化・非対話化しておくと、リジェクト対応の再提出が数分で回せるようになります。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>EAS Build/Submitで証明書とASC APIキーをクラウド管理し、2回目以降のビルド・提出を完全非対話化（ビルド番号も自動インクリメント）。ライブラリが自動注入するpush通知entitlementが原因のビルド失敗は、自作config pluginで該当エントリを除去して恒久解決しました。審査提出では「iPad対応フラグが立っているとiPadスクリーンショットが必須になる」ことが判明し、未検証のiPad対応を外してiPhone専用で提出する判断をしています。プライバシー申告・EEA配信除外（同意フォーム未実装のため）・App内課金の同時提出まで含めて完遂しました。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>ビルド・提出は初回に対話で通し、即座に非対話化して再現可能にする</li>
+      <li>検証していないデバイス対応フラグ（iPad等）は外す — 審査は全対応デバイスで行われる</li>
+      <li>プライバシー申告はSDKベンダーの公式ガイダンス（AdMob/分析各社が公開している）に従って作る</li>
+      <li>配信地域は法務要件（GDPR/DSA等）とセットで判断する</li>
+    </ul>
+  </div>
+</section>
+
+<section class="topic" id="t15">
+  <h2><span class="num">15</span>アクセシビリティ</h2>
+  <p class="tagline">VoiceOverで一周すると、見えなかったバグが見える</p>
+  <div class="block">
+    <span class="label why">なぜ汎用か</span>
+    <p>アクセシビリティは特別対応ではなく品質項目です。スクリーンリーダーで操作不能な画面は一部のユーザーにとって「クラッシュと同じ」であり、ストア審査やレビューでの指摘対象にもなります。そして多くの問題は、知っていれば数行で防げるものです。</p>
+  </div>
+  <div class="block">
+    <span class="label ex">QuesToDoでの実例</span>
+    <p>モーダルの背景Pressableがデフォルト設定のままだとVoiceOverが内部要素を畳み込み、シート内の操作に一切到達できなくなる問題を検出し、<code>accessible={false}</code>の明示をモーダル実装の必須ルール化。アコーディオンには開閉状態の読み上げ（expanded state）を付与し、完了演出はスクリーンリーダー使用時に自動クローズを無効化してユーザーのペースで読めるようにしました。</p>
+  </div>
+  <div class="block">
+    <span class="label point">実践ポイント</span>
+    <ul>
+      <li>コンテナ系Viewの暗黙のaccessible挙動に注意（要素の畳み込み事故）</li>
+      <li>開閉・選択などの状態はaccessibility stateで伝える</li>
+      <li>自動で消えるUI（トースト・演出）はスクリーンリーダー時に挙動を変える</li>
+      <li>リリース前に一度、目を閉じてVoiceOverだけで主要フローを操作してみる</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div>QuesToDo開発の実例に基づく技術ガイド — ninomae（2026）</div>
+  <div><a class="link" href="./index.html">① ポートフォリオ</a> / <a class="link" href="./app-starter-guide.html">③ 初学者向けチェックリスト</a></div>
+</footer>
+
+</div>
+</body>
+</html>

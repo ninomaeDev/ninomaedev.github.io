@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="はじめてスマートフォンアプリを1から作る人向けに、「入れておくべき機能と仕組み」を4つのフェーズ×22項目のチェックリストで解説。実際にApp Store審査提出まで到達したアプリの経験に基づく初学者向けガイド。">
+<meta property="og:title" content="はじめてのスマホアプリ開発 実装チェックリスト">
+<meta property="og:description" content="1からアプリを作るなら何を入れるべきか — 初学者向けに22項目をやさしく解説。">
+<meta property="og:type" content="article">
+<title>はじめてのスマホアプリ開発 実装チェックリスト — 1から作るなら何を入れるべきか</title>
+<style>
+  :root {
+    --accent: #0066cc;
+    --accent-soft: #e8f1fb;
+    --ink: #1d1d1f;
+    --ink-2: #4b4b50;
+    --ink-3: #6e6e73;
+    --bg: #f5f5f7;
+    --card: #ffffff;
+    --line: #e3e3e8;
+    --ok: #1a7f37;
+    --ok-soft: #eef7ee;
+    --warn: #9a6700;
+    --warn-soft: #fdf3e3;
+    --opt: #6e56cf;
+    --opt-soft: #f1eefb;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", Meiryo, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.85; font-size: 15.5px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+
+  nav.docnav { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 24px; }
+  nav.docnav a {
+    padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); font-size: 13px; color: var(--ink-2); text-decoration: none;
+  }
+  nav.docnav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav.docnav a.current { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+  header.hero { padding: 36px 0 12px; }
+  .hero .kicker { color: var(--accent); font-weight: 600; letter-spacing: .06em; font-size: 13px; }
+  .hero h1 { font-size: 30px; font-weight: 600; letter-spacing: -.02em; line-height: 1.35; margin: 6px 0 10px; }
+  .hero .lede { color: var(--ink-2); font-size: 16px; max-width: 46em; }
+
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; font-size: 13px; color: var(--ink-2); align-items: center; }
+  .badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+    padding: 2px 10px; border-radius: 999px; vertical-align: 2px;
+  }
+  .badge.must { background: var(--ok-soft); color: var(--ok); }
+  .badge.should { background: var(--warn-soft); color: var(--warn); }
+  .badge.opt { background: var(--opt-soft); color: var(--opt); }
+
+  nav.toc {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 22px; margin: 24px 0 8px;
+  }
+  nav.toc .t { font-weight: 600; font-size: 13.5px; color: var(--ink-3); margin-bottom: 8px; }
+  nav.toc ol { margin-left: 1.4em; font-size: 14px; }
+  nav.toc li { margin: 3px 0; }
+  nav.toc a { color: var(--ink-2); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc .rel { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); }
+  nav.toc .rel a { color: var(--accent); }
+
+  h2.phase {
+    font-size: 22px; font-weight: 600; letter-spacing: -.01em;
+    margin: 48px 0 4px;
+  }
+  h2.phase .num { color: var(--accent); font-size: 14px; font-weight: 600; margin-right: 8px; }
+  .phase-sub { color: var(--ink-3); font-size: 14px; margin-bottom: 18px; }
+
+  .item {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px 24px; margin-bottom: 14px;
+  }
+  .item h3 { font-size: 16.5px; font-weight: 600; margin-bottom: 2px; }
+  .item h3 .no { color: var(--ink-3); font-weight: 400; margin-right: 6px; }
+  .item .what { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; }
+  .item .why { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; }
+  .item .why b, .item .what b { color: var(--ink); }
+  .item .ex {
+    margin-top: 10px; padding: 10px 14px; border-radius: 10px;
+    background: var(--accent-soft); font-size: 13.5px; color: #08427c;
+  }
+  .item .ex::before { content: "🎮 QuesToDoでは: "; font-weight: 600; }
+  .term { border-bottom: 1px dashed var(--ink-3); }
+
+  code {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: .88em;
+    background: var(--accent-soft); color: #08427c; padding: 1px 6px; border-radius: 5px;
+  }
+
+  .outro {
+    background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: var(--radius); padding: 22px 24px; margin-top: 48px;
+  }
+  .outro h2 { font-size: 18px; margin-bottom: 8px; }
+  .outro p { font-size: 14.5px; color: var(--ink-2); }
+  .outro p + p { margin-top: 8px; }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  a.link { color: var(--accent); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .item { break-inside: avoid; border: 1px solid #ddd; }
+    nav.docnav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="docnav" aria-label="関連ドキュメント">
+  <a href="./index.html">① 開発ポートフォリオ</a>
+  <a href="./mobile-tech-guide.html">② 汎用技術ガイド（中級者向け）</a>
+  <a href="./app-starter-guide.html" class="current" aria-current="page">③ はじめての実装チェックリスト（初学者向け）</a>
+</nav>
+
+<header class="hero">
+  <div class="kicker">FOR BEGINNERS</div>
+  <h1>はじめてのスマホアプリ開発 実装チェックリスト<br><span style="color:var(--ink-3); font-weight:300; font-size:19px;">— もう一度1から作るなら、これを入れる</span></h1>
+  <p class="lede">
+    スマートフォンアプリを1本、企画からApp Storeの審査提出まで作りきって分かったのは、
+    「アプリの本体機能」よりも<b>その周りの仕組み</b>に落とし穴が多いということでした。
+    このページは、これから初めてアプリを作る人に向けて、「最初から入れておくと後で泣かずに済むもの」を
+    作る順番どおりに22個、できるだけやさしい言葉でまとめたものです。
+  </p>
+  <div class="legend">
+    重要度:
+    <span><span class="badge must">必須</span> 入れないと後で困る</span>
+    <span><span class="badge should">おすすめ</span> 入れると品質が一段上がる</span>
+    <span><span class="badge opt">必要なら</span> アプリの種類による</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="t">目次</div>
+  <ol>
+    <li><a href="#p1">フェーズ1: 作りはじめる前に（1〜4）</a></li>
+    <li><a href="#p2">フェーズ2: アプリの土台（5〜9）</a></li>
+    <li><a href="#p3">フェーズ3: ユーザーにやさしくする機能（10〜16）</a></li>
+    <li><a href="#p4">フェーズ4: 公開とお金まわり（17〜22）</a></li>
+  </ol>
+  <div class="rel">
+    もっと詳しく: 技術的な深掘りは <a href="./mobile-tech-guide.html">② 汎用技術ガイド</a>、実際に作ったアプリの全体像は <a href="./index.html">① 開発ポートフォリオ</a> へ。
+  </div>
+</nav>
+
+<h2 class="phase" id="p1"><span class="num">フェーズ1</span>作りはじめる前に</h2>
+<p class="phase-sub">コードを書く前の準備。ここをさぼると、後半すべてが遅くなります</p>
+
+<div class="item">
+  <h3><span class="no">1.</span>「何を作るか」を紙に書く（かんたんな仕様書）<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> 「どんな画面があるか」「何ができるか」「何は<b>やらない</b>か」を、作る前に文章にしておくことです。数ページのメモで十分です。</p>
+  <p class="why"><b>なぜ入れる?</b> 作っている途中で必ず「あれもこれも」と欲が出ます。書いた仕様が「迷ったときに戻る場所」になり、完成まで走りきれます。特に「やらないことリスト」が効きます。</p>
+  <p class="ex">要件・画面・データ・デザインの文書5本を先に作り、実装と食い違ったら「文書を直してからコードを直す」ルールで最後までブレませんでした。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">2.</span>バージョン管理（Git / GitHub）<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> コードの<span class="term">セーブポイント</span>を作る仕組みです。「コミット」という単位で変更を記録し、GitHubに置けばPCが壊れてもコードが残ります。</p>
+  <p class="why"><b>なぜ入れる?</b> アプリ開発では「さっきまで動いてたのに壊れた」が日常です。こまめにコミットしていれば、いつでも動いていた状態に戻れます。「1機能できたら1コミット」から始めれば十分です。</p>
+  <p class="ex">「1つの区切りが終わるごとにコミット」を徹底し、18日間で71コミット。何かを壊しても、どこで壊したかすぐ特定できました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">3.</span>作る道具を決める（フレームワークと型のある言語）<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> 個人開発なら、iPhone/Android両対応の<span class="term">クロスプラットフォーム</span>（React Native + Expo、Flutterなど）が現実的です。そして言語は<b>型のあるモード</b>（TypeScriptのstrictなど）で始めます。「型」は変数に入るデータの種類をコンピュータに約束させる仕組みです。</p>
+  <p class="why"><b>なぜ入れる?</b> 型があると、書きまちがいの多くが実行前にエラーとして見つかります。アプリはユーザーの手元でクラッシュすると取り返しがつきにくいので、この保険がとても効きます。「あとで型を厳しくしよう」は現実にはやらないので、初日からです。</p>
+  <p class="ex">React Native (Expo) + TypeScript strictを初日に設定。「any（型チェックの無効化）は使わない」ルールで、13,000行を超えてもコンパイラが常に守ってくれました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">4.</span>デザインのルールを最初に3つだけ決める<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 「メインの色は1色だけ」「文字サイズは決めた段階のみ」「余白は8の倍数」のような、少数のルールを決めて定数ファイルに書いておくことです。</p>
+  <p class="why"><b>なぜ入れる?</b> デザインが素人っぽく見える一番の原因は、画面ごとに色やサイズが微妙にバラバラなことです。ルールで選択肢を減らせば、デザイナーでなくても統一感が出ます。色をコードのあちこちに直書きしないのがコツです。</p>
+  <p class="ex">「アクセント色は青1色だけ」「フォントの太さは3段階だけ」等をルール化して定数に集約。11画面作ってもトーンが揃いました。</p>
+</div>
+
+<h2 class="phase" id="p2"><span class="num">フェーズ2</span>アプリの土台</h2>
+<p class="phase-sub">機能を積む前に入れる基礎工事。あとから入れ直すのが一番大変な層です</p>
+
+<div class="item">
+  <h3><span class="no">5.</span>データの保存と「あとから変える」準備<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> ユーザーのデータを端末内のデータベース（SQLiteなど）に保存します。大事なのはセットで<span class="term">マイグレーション</span>（保存形式をあとから安全に変更する仕組み）を最初から用意することです。</p>
+  <p class="why"><b>なぜ入れる?</b> アプリを更新しても、ユーザーの端末には<b>古い形式のデータが残っています</b>。「列を1つ追加したらアプリが起動しなくなった」は定番の事故です。「変更は追加だけ・削除しない」「バージョン番号で管理」の2つを守るだけで、この事故はほぼ防げます。</p>
+  <p class="ex">データ形式はv1→v9まで9世代（初期作成+8回の変更）を重ねましたが、「追加だけの変更」と「古いバージョンのデータが新形式へ正しく引き継がれるかを確かめるテスト」のセットで、データが消える事故はゼロでした。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">6.</span>文言をコードから分ける（多言語対応の準備）<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 画面に表示する文字を、コードに直接書かず「辞書ファイル」（日本語用・英語用のJSONなど）にまとめておくことです。</p>
+  <p class="why"><b>なぜ入れる?</b> あとから多言語対応しようとすると全画面の書き直しになります。最初から分けておけば、英語版はファイルを1枚訳すだけ。日本語だけのつもりでも、文言の修正がコードを触らずにできるので開発中から楽です。</p>
+  <p class="ex">初日から「文字の直書き禁止」にして、日英2言語・約560個の文言を辞書ファイルで管理。英語版の追加はほぼ翻訳作業だけでした。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">7.</span>テストを書く（まずは計算ロジックだけでいい）<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 「この関数にこれを入れたらこれが返る」を自動で確認するコードです。全部に書く必要はなく、<b>間違えると痛い計算</b>（ポイント計算、日付の判定、データ変換）だけでも効果絶大です。</p>
+  <p class="why"><b>なぜ入れる?</b> アプリは修正のたびに全機能を手で確認するのが現実的でなくなります。テストがあれば「昨日まで動いていたものを今日壊していないか」を数秒で確認でき、安心して変更できるようになります。</p>
+  <p class="ex">経験値計算・連続記録・日付処理を中心に366個のテストを用意。リリース直前の変更も怖くありませんでした。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">8.</span>日付と時刻の扱いを最初に決める<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 「日時はこの形式で統一する」「『今日』はどう判定する」を決め、<b>現在時刻を関数の外から渡す</b>書き方にしておくことです。</p>
+  <p class="why"><b>なぜ入れる?</b> スマホアプリのバグの名所は深夜0時前後です。「日付が変わった瞬間の連続記録」「開きっぱなしで日をまたいだ画面」——現在時刻を外から渡す書き方なら、こういう場面をテストで再現して事前に潰せます。</p>
+  <p class="ex">全ロジックが「現在時刻」を引数で受け取る規約に。深夜0時をまたぐ連続記録の挙動を、任意の時刻を指定したテストで固定できました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">9.</span>外部サービスの呼び出しを1か所にまとめる<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 広告・課金・分析など外部のSDK（他社の部品）を使うときは、画面のコードから直接呼ばず、<code>services</code>のような専用フォルダに窓口を作って必ずそこを通すことです。</p>
+  <p class="why"><b>なぜ入れる?</b> 外部SDKは仕様変更やサービス終了が起きます。窓口が1か所なら、差し替えもそこだけ。さらに「設定が未完成でも安全に動く」ようにしておくと、開発中にアプリが起動しなくなる事故を防げます。</p>
+  <p class="ex">広告・課金・分析・通知・バックアップを全部services/に隔離。APIキー未設定のときは「何もしないモード」で動く設計にしました。</p>
+</div>
+
+<h2 class="phase" id="p3"><span class="num">フェーズ3</span>ユーザーにやさしくする機能</h2>
+<p class="phase-sub">本体機能ができたら入れる「続けてもらう・困らせない」ための仕組み</p>
+
+<div class="item">
+  <h3><span class="no">10.</span>オンボーディング（最初の説明）<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 初回起動のときだけ表示する、2〜3枚のかんたんな説明画面です。最後は「最初の1つを作ってみる」など、すぐ行動につながるボタンで終えます。</p>
+  <p class="why"><b>なぜ入れる?</b> ユーザーは説明書を読みません。最初の30秒で「何をすればいいか」が分からないアプリは、そのまま削除されます。長い説明より「1歩目への誘導」が大事です。</p>
+  <p class="ex">世界観・成長・通知許可・最初の一歩の4ステップにして、最後は「最初のクエストを作る」ボタンで作成画面に直行する導線にしました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">11.</span>空っぽのときの画面（空状態）<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> データが0件のときに、白紙ではなく「まだ何もありません。＋ボタンから作ってみましょう」のような案内を出すことです。</p>
+  <p class="why"><b>なぜ入れる?</b> 新規ユーザーが最初に見るのは、ほぼ必ず「データ0件の画面」です。つまり空状態こそ第一印象。白紙の画面は「壊れてる?」と誤解され、最初の離脱ポイントになります。</p>
+  <p class="ex">一覧・検索結果・ゴミ箱など「0件になり得る画面」を洗い出して、全部に案内文を入れました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">12.</span>通知機能（リマインダー）<span style="margin-left:8px;"><span class="badge opt">必要なら</span></span></h3>
+  <p class="what"><b>これは何?</b> 「今日のタスクがあります」「期限が近いです」のようなお知らせです。サーバー不要の<span class="term">ローカル通知</span>（アプリが端末内で予約する通知）だけで、かなりのことができます。</p>
+  <p class="why"><b>なぜ入れる?</b> タスク・習慣・学習系など「思い出してもらうことに価値がある」アプリなら強くおすすめです。どんなに良いアプリでも、ユーザーは忘れます。通知は「思い出してもらう」ほぼ唯一の手段です。ただし通知の許可は断られることも多いので、<b>許可がなくても困らない設計</b>にしておくこと。乱発すると通知ごとオフにされるので回数は控えめに。</p>
+  <p class="ex">デイリー・期限・連続記録が途切れそうなときの3種類をローカル通知だけで実装。サーバー代0円で毎日のリマインドが動いています。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">13.</span>フィードバック機能（問い合わせ導線）<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> 設定画面に「ご意見・お問い合わせ」ボタンを置き、タップでメール作成画面が開くようにする——最小構成ならこれだけです。</p>
+  <p class="why"><b>なぜ入れる?</b> 不満を伝える場所がないと、ユーザーは<b>ストアの星1レビューに直接書きます</b>。アプリ内に窓口があれば、不具合報告や要望が先にあなたへ届き、改善のヒントにもなります。実装は数行なのに効果が大きい、コスパ最強の機能です。</p>
+  <p class="ex">設定画面にフィードバックメールの導線を設置。宛先は定数ファイルにまとめ、件名にアプリ名、本文の末尾にバージョン・OS・言語が自動で入るようにしました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">14.</span>レビューを促す機能<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 入れ方は2つあります。①OS標準のレビュー依頼画面（iOSなら<code>StoreKit</code>のレビューAPI）を「ユーザーが良い体験をした直後」にだけ表示する ②設定画面に「アプリをレビューする」ボタンを置き、ストアのレビュー入力画面へ直接ジャンプさせる。</p>
+  <p class="why"><b>なぜ入れる?</b> ストアの評価はダウンロード数に直結しますが、満足しているユーザーほど自分からはレビューを書きません。①は「目標を達成した直後」など気分がいい瞬間に一度だけお願いするのがコツで、OSの仕様で表示回数に上限があり乱発できません（表示される保証もありません）。だからこそ、自分から書きたくなったユーザーを逃さない②の常設ボタンをセットで持つのが定石です。</p>
+  <p class="ex">①はレベルアップ演出が終わった直後だけに限定し、さらに「累計10件完了・60日間隔・上限3回」の自前ルールで抑制。②は設定画面の「アプリをレビューする」からApp Storeのレビュー画面へ直接遷移する導線を用意しました（こちらは回数制限なし）。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">15.</span>バックアップ（機種変更・データ復元）<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> ユーザーのデータをファイル（JSONなど）に書き出して、別の端末や再インストール後に読み込めるようにする機能です。</p>
+  <p class="why"><b>なぜ入れる?</b> データが端末の中だけにあるアプリでは、機種変更=全データ消失になりかねません。長く使ってくれた人ほどダメージが大きく、信頼を一発で失います。読み込むときは「壊れたファイル・改ざんされたファイルかもしれない」と疑って中身をチェックするのが重要です。</p>
+  <p class="ex">書き出し/読み込みに対応し、読み込み時は形式・日付・数値の範囲まで検証してから復元。課金状態は改ざん防止のため意図的にバックアップへ含めていません。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">16.</span>アクセシビリティ（スクリーンリーダー対応）<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 画面を読み上げる機能（iOSのVoiceOverなど）で操作できるようにすることです。ボタンに説明を付ける、開閉状態を伝える、といった小さな積み重ねです。</p>
+  <p class="why"><b>なぜ入れる?</b> 読み上げで操作できない画面は、その人にとって「アプリが壊れている」のと同じです。多くの対応は数行で済みますが、知らないと「画面に重ねて表示される小窓（モーダル）の中が、読み上げでは一切操作できない」ような大きな事故も起きます。公開前に一度、読み上げだけで主要な操作を試してみてください。</p>
+  <p class="ex">読み上げだと編集シート（画面下からせり上がる入力画面）内の操作に到達できなくなる罠を実際に踏み、モーダル実装のルールとして対策を明文化しました。</p>
+</div>
+
+<h2 class="phase" id="p4"><span class="num">フェーズ4</span>公開とお金まわり</h2>
+<p class="phase-sub">ストアに出す直前〜出した後のこと。コード以外の作業が意外と多い場所です</p>
+
+<div class="item">
+  <h3><span class="no">17.</span>ユーザーの行動分析<span style="margin-left:8px;"><span class="badge should">おすすめ</span></span></h3>
+  <p class="what"><b>これは何?</b> 「どの機能が何回使われたか」を匿名で記録する仕組みです（PostHog、Firebase Analyticsなど無料枠のあるサービスで十分）。</p>
+  <p class="why"><b>なぜ入れる?</b> 公開後の改善は「どこでユーザーが離脱しているか」「どの機能が使われていないか」が見えないと勘だよりになります。ただし何でも記録するのではなく、<b>知りたいことを決めてから記録する項目を設計</b>すること。名前やメールアドレスなどの個人情報は入れてはいけません。</p>
+  <p class="ex">「継続に効いている機能はどれか」を知るために11種類のイベントだけを定義。識別子は端末が生成する匿名IDのみで、個人情報は一切送っていません。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">18.</span>課金 — 料金をあとから変えられる作りに<span style="margin-left:8px;"><span class="badge opt">必要なら</span></span></h3>
+  <p class="what"><b>これは何?</b> サブスクリプションや買い切りを売る機能です。大事な設計が2つ: ①価格をコードに直書きせず<b>ストアから動的に取得</b>する（値上げ・値下げ・国別価格がアプリ更新なしで反映される） ②「月額プランを買ったか」ではなく「<span class="term">プレミアム権</span>を持っているか」で判定する（あとからプランを増やしても画面のコードが変わらない）。</p>
+  <p class="why"><b>なぜ入れる?</b> 料金は公開後にほぼ必ず見直します。直書きしていると、価格を変えるたびにアプリの審査からやり直しです。また課金は「購入が本物かをストアに確認する処理（レシート検証）」など罠が多いので、RevenueCatのような専門サービスに乗るのが個人開発では現実的です。</p>
+  <p class="ex">月額・年額・買い切りの3プランを「プレミアム」という1つの権利にまとめ、価格表示はすべてストアから取得。App Store Connect（Appleのアプリ管理サイト）で価格を変えるだけで、アプリはそのまま追従します。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">19.</span>広告<span style="margin-left:8px;"><span class="badge opt">必要なら</span></span></h3>
+  <p class="what"><b>これは何?</b> 無料アプリの収益源です。バナー（画面端の帯）と、ユーザーが見る代わりに特典をもらうリワード広告が定番です。</p>
+  <p class="why"><b>なぜ入れる?</b> 収益化の入り口として最も手軽ですが、注意が2つ。①開発中は必ず<b>テスト用の広告ID</b>を使うこと（本物の広告を自分でタップするとアカウント停止のリスク） ②どの画面に「置かないか」を先に決めること。体験の中心に広告を置くと、アプリごと削除されます。</p>
+  <p class="ex">開発ビルドでは自動でテストIDに切り替わる仕組みにして事故を防止。世界観の中心であるホーム画面にはバナーを置かない、と最初に決めました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">20.</span>プライバシーポリシーとストアへの申告<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> 「このアプリがどんなデータを集めるか」を書いた文書（Webページとして公開）と、ストア提出時のプライバシー申告フォームへの回答です。広告や分析のSDKを入れると、自分でデータを集めていなくても申告が必要になります。</p>
+  <p class="why"><b>なぜ入れる?</b> これがないとそもそも審査に出せません。各SDKの公式が「こう申告してください」というガイドを出しているので、それに沿って正直に書くのが一番安全です。実装と申告が食い違うのが最悪パターンです。</p>
+  <p class="ex">ポリシーはGitHub Pagesで無料公開。AdMob/PostHog/RevenueCatの公式ガイダンスに沿って収集データ7種を申告しました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">21.</span>ストアの素材（アイコン・スクショ・説明文）<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> アプリアイコン、規定サイズのスクリーンショット、アプリ名・説明文・検索キーワードなど、ストアの商品ページを構成する素材一式です。</p>
+  <p class="why"><b>なぜ入れる?</b> ユーザーはコードではなく商品ページを見てダウンロードを決めます。スクリーンショットには規定サイズがあり、審査直前に慌てがちなので、撮影→リサイズの手順を先に作っておくとスムーズです。</p>
+  <p class="ex">実機で撮影→規定サイズ（1242×2688）へ自動変換する小さなスクリプトを用意。アイコンもアプリ内のドット絵素材から自動生成しました。</p>
+</div>
+
+<div class="item">
+  <h3><span class="no">22.</span>公開後の改善ループ<span style="margin-left:8px;"><span class="badge must">必須</span></span></h3>
+  <p class="what"><b>これは何?</b> 公開はゴールではなくスタートです。行動分析（17）とフィードバック（13）とレビュー（14）から入ってくる情報を見て、小さく直して、また出す——この繰り返しの体制です。</p>
+  <p class="why"><b>なぜ入れる?</b> 最初のバージョンの想定は必ずどこか外れています。すぐ直してすぐ出せるように、ビルドと提出の手順は自動化しておくこと。バージョン管理（2）・テスト（7）・マイグレーション（5）は全部、この「直し続けられる状態」のための投資だったと公開後に気づきます。</p>
+  <p class="ex">ビルド番号の自動更新と提出の非対話化までを整備済み。修正版を出す作業は「ビルド」と「提出」のコマンド2つだけになっています。</p>
+</div>
+
+<div class="outro">
+  <h2>さいごに — 全部を最初からやらなくていい</h2>
+  <p>22個ぜんぶを最初のアプリで完璧にやる必要はありません。ただ、<b>フェーズ1〜2の「土台」だけは後から入れ直すのが本当に大変</b>なので、最初の1週間で仕込んでおくことを強くおすすめします。フェーズ3〜4は、動くものができてから1つずつ足していけば大丈夫です。</p>
+  <p>それぞれの項目の技術的な深掘りは <a class="link" href="./mobile-tech-guide.html">② 汎用技術ガイド</a> に、これらを実際に全部入れて審査提出まで到達した記録は <a class="link" href="./index.html">① 開発ポートフォリオ</a> にまとめてあります。</p>
+</div>
+
+<footer>
+  <div>QuesToDo開発の経験に基づく初学者向けガイド — ninomae（2026）</div>
+  <div><a class="link" href="./index.html">① ポートフォリオ</a> / <a class="link" href="./mobile-tech-guide.html">② 技術ガイド</a></div>
+</footer>
+
+</div>
+</body>
+</html>

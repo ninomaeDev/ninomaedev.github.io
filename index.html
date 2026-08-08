@@ -4,23 +4,65 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
+<meta name="description" content="タスクをこなして冒険者を育てるRPG風ToDoアプリ QuesToDo（iOS）の公式サイト。プライバシーポリシー、開発ドキュメントを掲載しています。">
 <title>QuesToDo — クエストをこなして冒険者を育てるRPG風ToDo</title>
 <style>
   html { background: #faf6ef; }
-  body { font-family: -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif; max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; color: #1d1d1f; line-height: 1.8; text-align: center; background: #faf6ef; }
+  body {
+    font-family: -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
+    max-width: 720px; margin: 0 auto; padding: 48px 16px 64px;
+    color: #1d1d1f; line-height: 1.8; text-align: center; background: #faf6ef;
+  }
   h1 { font-size: 2rem; margin-bottom: 8px; }
-  .tagline { color: #6e6e73; margin-bottom: 40px; }
+  .tagline { color: #6e6e73; margin-bottom: 32px; }
+  .store { margin: 32px 0 40px; }
+  .store a {
+    display: inline-block; background: #0066cc; color: #fff; text-decoration: none;
+    padding: 12px 28px; border-radius: 10px; font-size: 1rem; font-weight: 600;
+  }
+  h2 { font-size: 1.1rem; margin: 48px 0 4px; }
+  .section-note { color: #6e6e73; font-size: 0.9rem; margin-bottom: 12px; }
   .links a { display: inline-block; margin: 8px 12px; color: #0066cc; font-size: 0.95rem; }
+  .docs { text-align: left; max-width: 560px; margin: 0 auto; }
+  .docs li { margin: 10px 0; font-size: 0.95rem; }
+  .docs a { color: #0066cc; font-weight: 600; text-decoration: none; }
+  .docs a:hover { text-decoration: underline; }
+  .docs span { color: #6e6e73; font-size: 0.88rem; display: block; }
+  footer { margin-top: 56px; font-size: 0.85rem; color: #6e6e73; }
 </style>
 </head>
 <body>
 <h1>QuesToDo</h1>
 <p class="tagline">タスクをこなして冒険者を育てる、RPG風ToDoアプリ（iOS）</p>
 <p>やることを「クエスト」として登録し、完了するとEXPを獲得。レベルアップでスキルやドット絵アバターのパーツが解放されます。</p>
+
+<div class="store">
+  <a href="https://apps.apple.com/app/questodo/id6794613228">App Storeでダウンロード</a>
+</div>
+
+<h2>開発ドキュメント</h2>
+<p class="section-note">このアプリをどう作ったかの記録です</p>
+<ul class="docs">
+  <li>
+    <a href="./portfolio/index.html">開発ポートフォリオ</a>
+    <span>企画からApp Store公開までの全工程と、設計判断の理由</span>
+  </li>
+  <li>
+    <a href="./portfolio/mobile-tech-guide.html">モバイルアプリ開発 汎用技術ガイド</a>
+    <span>どのアプリでも必要になる15の技術を、実例つきで整理</span>
+  </li>
+  <li>
+    <a href="./portfolio/app-starter-guide.html">はじめての実装チェックリスト</a>
+    <span>1からアプリを作るなら何を入れるべきか、初学者向けに22項目</span>
+  </li>
+</ul>
+
+<h2>規約</h2>
 <div class="links">
   <a href="./privacy.html">プライバシーポリシー / Privacy Policy</a>
   <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">利用規約（Apple標準EULA） / Terms of Use (Apple Standard EULA)</a>
 </div>
-<p style="margin-top:48px; font-size:0.85rem; color:#6e6e73;">お問い合わせ: ninomae.contact+questodo@gmail.com</p>
+
+<footer>お問い合わせ: ninomae.contact+questodo@gmail.com</footer>
 </body>
 </html>
