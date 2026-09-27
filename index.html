@@ -4,65 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<meta name="description" content="タスクをこなして冒険者を育てるRPG風ToDoアプリ QuesToDo（iOS）の公式サイト。プライバシーポリシー、開発ドキュメントを掲載しています。">
-<title>QuesToDo — クエストをこなして冒険者を育てるRPG風ToDo</title>
+<meta name="description" content="ninomaeDev が公開しているアプリのサポート窓口です。各アプリのサポートページ・プライバシーポリシー・お問い合わせ先をまとめています。">
+<title>アプリサポート | ninomaeDev</title>
 <style>
-  html { background: #faf6ef; }
+  :root {
+    --accent: #0066cc;
+    --ink: #1d1d1f;
+    --ink-2: #4b4b50;
+    --ink-3: #6e6e73;
+    --bg: #f5f5f7;
+    --card: #ffffff;
+    --line: #e3e3e8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); }
   body {
-    font-family: -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", Meiryo, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.8;
     max-width: 720px; margin: 0 auto; padding: 48px 16px 64px;
-    color: #1d1d1f; line-height: 1.8; text-align: center; background: #faf6ef;
   }
-  h1 { font-size: 2rem; margin-bottom: 8px; }
-  .tagline { color: #6e6e73; margin-bottom: 32px; }
-  .store { margin: 32px 0 40px; }
-  .store a {
-    display: inline-block; background: #0066cc; color: #fff; text-decoration: none;
-    padding: 12px 28px; border-radius: 10px; font-size: 1rem; font-weight: 600;
+  header { margin-bottom: 40px; }
+  h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -.01em; }
+  .tagline { color: var(--ink-3); margin-top: 6px; font-size: 0.95rem; }
+  h2 { font-size: 1.05rem; font-weight: 600; margin: 40px 0 12px; }
+  .app {
+    display: block; background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; text-decoration: none; color: inherit;
+    margin-bottom: 12px;
   }
-  h2 { font-size: 1.1rem; margin: 48px 0 4px; }
-  .section-note { color: #6e6e73; font-size: 0.9rem; margin-bottom: 12px; }
-  .links a { display: inline-block; margin: 8px 12px; color: #0066cc; font-size: 0.95rem; }
-  .docs { text-align: left; max-width: 560px; margin: 0 auto; }
-  .docs li { margin: 10px 0; font-size: 0.95rem; }
-  .docs a { color: #0066cc; font-weight: 600; text-decoration: none; }
-  .docs a:hover { text-decoration: underline; }
-  .docs span { color: #6e6e73; font-size: 0.88rem; display: block; }
-  footer { margin-top: 56px; font-size: 0.85rem; color: #6e6e73; }
+  .app:hover { border-color: var(--accent); }
+  .app span { display: block; }
+  .app .name { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
+  .app .desc { color: var(--ink-2); font-size: 0.92rem; margin-top: 2px; }
+  .app .platform { color: var(--ink-3); font-size: 0.82rem; margin-top: 8px; }
+  .note { color: var(--ink-3); font-size: 0.9rem; }
+  .links a { color: var(--accent); }
+  footer {
+    margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line);
+    font-size: 0.85rem; color: var(--ink-3);
+  }
+  footer a { color: var(--accent); }
 </style>
 </head>
 <body>
-<h1>QuesToDo</h1>
-<p class="tagline">タスクをこなして冒険者を育てる、RPG風ToDoアプリ（iOS）</p>
-<p>やることを「クエスト」として登録し、完了するとEXPを獲得。レベルアップでスキルやドット絵アバターのパーツが解放されます。</p>
 
-<div class="store">
-  <a href="https://apps.apple.com/app/questodo/id6794613228">App Storeでダウンロード</a>
-</div>
+<header>
+  <h1>アプリサポート</h1>
+  <p class="tagline">ninomaeDev が公開しているアプリの、サポート窓口と規約を置いています。</p>
+</header>
 
-<h2>開発ドキュメント</h2>
-<p class="section-note">このアプリをどう作ったかの記録です</p>
-<ul class="docs">
-  <li>
-    <a href="./portfolio/index.html">開発ポートフォリオ</a>
-    <span>企画からApp Store公開までの全工程と、設計判断の理由</span>
-  </li>
-  <li>
-    <a href="./portfolio/mobile-tech-guide.html">モバイルアプリ開発 汎用技術ガイド</a>
-    <span>どのアプリでも必要になる15の技術を、実例つきで整理</span>
-  </li>
-  <li>
-    <a href="./portfolio/app-starter-guide.html">はじめての実装チェックリスト</a>
-    <span>1からアプリを作るなら何を入れるべきか、初学者向けに22項目</span>
-  </li>
-</ul>
+<h2>公開中のアプリ</h2>
 
-<h2>規約</h2>
-<div class="links">
-  <a href="./privacy.html">プライバシーポリシー / Privacy Policy</a>
-  <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">利用規約（Apple標準EULA） / Terms of Use (Apple Standard EULA)</a>
-</div>
+<a class="app" href="./questodo/">
+  <span class="name">QuesToDo</span>
+  <span class="desc">タスクをこなして冒険者を育てる、RPG風ToDoアプリ</span>
+  <span class="platform">iPhone / 日本語・英語 — サポートとプライバシーポリシー</span>
+</a>
 
-<footer>お問い合わせ: ninomae.contact+questodo@gmail.com</footer>
+<h2>お問い合わせ</h2>
+<p class="note">
+  アプリごとの窓口は各サポートページに記載しています。全般のお問い合わせは
+  <a href="mailto:ninomae.contact@gmail.com">ninomae.contact@gmail.com</a> まで。
+</p>
+
+<footer>
+  制作物の紹介や記事は
+  <a href="https://ninomae-renichi.com/">ninomae-renichi.com</a>
+  にまとめています。
+</footer>
+
 </body>
 </html>
